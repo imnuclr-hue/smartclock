@@ -1,27 +1,16 @@
-from sensors.bh1750_sensor import BH1750Sensor
-from sensors.bme280_sensor import BME280Sensor
-from services.api import start_api
 from utils.logger import log
-
-import time
+from services.api import start_api
+from ui.display import start_display
 
 def main():
     log("Starting Smart Clock...")
 
-    # Initialise sensors
-    light = BH1750Sensor()
-    climate = BME280Sensor()
-
-    # Start API in background
+    # Start Flask API (runs in background thread)
     start_api()
 
-    while True:
-        lux = light.read_lux()
-        temp, hum = climate.read()
+    # Start Kivy UI (this blocks until the app closes)
+    start_display()
 
-        log(f"Lux: {lux:.2f} | Temp: {temp:.1f}°C | Humidity: {hum:.1f}%")
-
-        time.sleep(1)
 
 if __name__ == "__main__":
     main()

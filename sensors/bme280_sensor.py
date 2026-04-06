@@ -1,12 +1,22 @@
-import board
-import adafruit_bme280
+import smbus2
+import bme280
+import time
 
-class BME280Sensor:
-    def __init__(self):
-        i2c = board.I2C()
-        self.sensor = adafruit_bme280.Adafruit_BME280_I2C(i2c)
+port = 1
+address = 0x76
 
-    def read(self):
-        temp = self.sensor.temperature
-        hum = self.sensor.humidity
-        return temp, hum
+
+class BME280:
+    def __init__(addr):
+        bus = smbus2.SMBus(port)
+        calibration_params = bme280.load_calibration_params(bus, address)
+
+    def read():
+        data = bme280.sample(bus, address, calibration_params)
+        temp = data.temperature
+        pre = data.pressure
+        hum = data.humidity
+        
+        return temp,pre,hum
+
+ 
